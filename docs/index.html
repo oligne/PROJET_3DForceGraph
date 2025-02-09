@@ -30,7 +30,7 @@
 
     // Ici, on charge le fichier JSON local ou depuis une URL
     const graph = ForceGraph3D()(elem)
-      .jsonUrl('datasets/data.json')  // Remplace par le chemin correct vers ton fichier JSON
+      .jsonUrl('data.json')  // Remplace par le chemin correct vers ton fichier JSON
       .nodeAutoColorBy('type')  // Adapte la clé selon ta structure JSON, ici 'type'
       .nodeLabel(node => `${node.Nom_du_fichier}: ${node.Extension}`)  // Change le label selon tes données
       .onNodeClick(node => alert(`Vous avez cliqué sur ${node.Nom_du_fichier}`));
