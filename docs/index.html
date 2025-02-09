@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Graphique 3D</title>
+  <title>Graphique 3D Fixe</title>
   <style>
     body, html {
       margin: 0;
@@ -17,8 +17,8 @@
       height: 100%;
     }
   </style>
- <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
- <script src="https://unpkg.com/3d-force-graph"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://unpkg.com/3d-force-graph"></script>
 </head>
 
 <body>
@@ -30,12 +30,22 @@
 
     // Ici, on charge le fichier JSON local ou depuis une URL
     const graph = ForceGraph3D()(elem)
-      .jsonUrl('data.json')  // Remplace par le chemin correct vers ton fichier JSON
+      .jsonUrl('datasets/data.json')  // Remplace par le chemin correct vers ton fichier JSON
       .nodeAutoColorBy('type')  // Adapte la clé selon ta structure JSON, ici 'type'
-      .nodeLabel(node => `${node.Nom_du_fichier}: ${node.Extension}`)  // Change le label selon tes données
-      .onNodeClick(node => alert(`Vous avez cliqué sur ${node.Nom_du_fichier}`));
+      .nodeLabel(node => `${node["Nom du fichier"]}: ${node.Extension}`)  // Change le label selon tes données
+      .onNodeClick(node => alert(`Vous avez cliqué sur ${node["Nom du fichier"]}`));
 
-    // Ajouter des options pour améliorer les performances si nécessaire
+    // Désactivation des interactions de drag, zoom et autres
+    graph.enableNodeDrag(false)
+      .enableZoom(false)
+      .enableMouseInteraction(false);  // Désactive les autres interactions de souris
+
+    // Applique une force pour garder l'arborescence fixe (représente des liens ou un graphe statique)
+    graph.d3Force('charge').strength(0)  // Éviter la répulsion entre les nœuds
+      .d3Force('link').strength(0.5)  // Ajuste la force des liens si nécessaire
+      .d3Force('collide').strength(0.2)  // Collisions modérées pour l'agencement
+
+    // Ajuste la mise en forme pour optimiser les performances
     graph.cooldownTicks(100)
       .d3AlphaDecay(0.02)
       .d3VelocityDecay(0.3)
