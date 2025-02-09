@@ -1,20 +1,101 @@
-<head>
-    <style> body { margin: 0; } </style>
-  
-    <script src="//unpkg.com/3d-force-graph"></script>
-    <!--<script src="../../dist/3d-force-graph.js"></script>-->
-  </head>
-  
-  <body>
+<!DOCTYPE html>
+<html lang="fr">
 
-    <div id="3d-graph"></div>
-  
-    <script>
-      const elem = document.getElementById('3d-graph');
-  
-      const Graph = new ForceGraph3D(elem)
-        .jsonUrl('data.json')
-        .nodeAutoColorBy('Dossier')
-        .nodeLabel(node => `${node.user}: ${node.description}`)
-    </script>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Graphique 3D</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    #3d-graph {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* Style du slider */
+    .control-panel {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 10;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://unpkg.com/3d-force-graph"></script>
+</head>
+
+<body>
+
+  <!-- Interface de contrôle -->
+  <div class="control-panel">
+    <label for="dataRange">Taille du graphe :</label>
+    <input type="range" id="dataRange" min="5" max="100" value="20" step="5">
+    <span id="dataPercentage">20%</span>
+  </div>
+
+  <!-- Conteneur du graph -->
+  <div id="3d-graph"></div>
+
+  <script>
+    const slider = document.getElementById('dataRange');
+    const percentageDisplay = document.getElementById('dataPercentage');
+    const elem = document.getElementById('3d-graph');
+    let fullGraph = null;
+
+    // Charger les données JSON
+    fetch(`datasets/data.json?t=${Date.now()}`)
+      .then(response => response.json())
+      .then(data => {
+        fullGraph = data;
+        updateGraph();
+      })
+      .catch(error => console.error('Erreur lors du chargement du fichier JSON :', error));
+
+    function updateGraph() {
+      if (!fullGraph) return;
+
+      const sampleSize = slider.value / 100; // Convertit en fraction (ex: 20% => 0.2)
+      percentageDisplay.textContent = `${slider.value}%`;
+
+      // Mélange les nœuds et en sélectionne un pourcentage
+      const filteredNodes = fullGraph.nodes
+        .sort(() => 0.5 - Math.random()) // Mélange aléatoire
+        .slice(0, Math.ceil(fullGraph.nodes.length * sampleSize));
+
+      // Conserver uniquement les liens connectés aux nœuds visibles
+      const filteredLinks = fullGraph.links.filter(link =>
+        filteredNodes.some(node => node.id === link.source) &&
+        filteredNodes.some(node => node.id === link.target)
+      );
+
+      console.log(`Affichage de ${filteredNodes.length} nœuds sur ${fullGraph.nodes.length}`);
+
+      graph.graphData({ nodes: filteredNodes, links: filteredLinks });
+    }
+
+    // Initialisation du graph
+    const graph = ForceGraph3D()(elem)
+      .nodeAutoColorBy('type')
+      .nodeLabel(node => `Fichier: ${node['Nom du fichier']}`)
+      .onNodeClick(node => alert(`Vous avez cliqué sur ${node['Nom du fichier']}`))
+      .cooldownTicks(100)
+      .d3AlphaDecay(0.02)
+      .d3VelocityDecay(0.3)
+      .linkWidth(0.3)
+      .linkOpacity(0.2);
+
+    // Écouteur pour mettre à jour le graph quand le slider change
+    slider.addEventListener('input', updateGraph);
+  </script>
+
+</body>
+
+</html>
