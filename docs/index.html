@@ -89,8 +89,12 @@
       .cooldownTicks(200)
       .d3AlphaDecay(0.1)
       .d3VelocityDecay(0.6)
+      .d3Force("charge", d3.forceManyBody().strength(-30)) // Réduit la répulsion
+      .d3Force("center", d3.forceCenter()) // Garde les nœuds centrés
+      .d3Force("collision", d3.forceCollide(3)) // Évite trop de chevauchement
       .linkWidth(0.3)
       .linkOpacity(0.8);
+      
 
     // Écouteur pour mettre à jour le graph quand le slider change
     slider.addEventListener('input', updateGraph);
