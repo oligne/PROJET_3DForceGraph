@@ -51,7 +51,7 @@
     let fullGraph = null;
 
     // Charger les données JSON
-    fetch(`datasets/data.json?t=${Date.now()}`)
+    fetch(`data.json?t=${Date.now()}`)
       .then(response => response.json())
       .then(data => {
         fullGraph = data;
