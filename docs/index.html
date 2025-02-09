@@ -85,11 +85,6 @@
     const graph = ForceGraph3D()(elem)
       .nodeAutoColorBy('Categorie')
       .nodeLabel(node => `Fichier: ${node["id"]}`)
-      .onNodeClick(node => alert(`Vous avez cliqué sur ${node['id']}`))
-      .d3AlphaDecay(0.1)
-      .d3VelocityDecay(0.6)
-      .linkWidth(0.3)
-      .linkOpacity(0.8)
       .onNodeClick(node => {
           // Aim at node from outside it
           const distance = 40;
@@ -103,8 +98,13 @@
             newPos, // new position
             node, // lookAt ({ x, y, z })
             3000  // ms transition duration
-          );
-        });
+          );})
+      .d3AlphaDecay(0.1)
+      .d3VelocityDecay(0.6)
+      .linkWidth(0.3)
+      .linkOpacity(0.8)
+      
+        
       
 
     // Écouteur pour mettre à jour le graph quand le slider change
