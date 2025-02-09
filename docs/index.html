@@ -67,7 +67,7 @@
 
       // Mélange les nœuds et en sélectionne un pourcentage
       const filteredNodes = fullGraph.nodes
-        .sort(() => 0.5 - Math.random()) // Mélange aléatoire
+        .sort(() => 0.01 - Math.random()) // Mélange aléatoire
         .slice(0, Math.ceil(fullGraph.nodes.length * sampleSize));
 
       // Conserver uniquement les liens connectés aux nœuds visibles
