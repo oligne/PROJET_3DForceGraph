@@ -84,7 +84,7 @@
     // Initialisation du graph
     const graph = ForceGraph3D()(elem)
       .nodeAutoColorBy('color')
-      .nodeLabel(node => `Fichier: ${node['id']}`)
+      .nodeLabel(node => `Fichier: ${node["id"]}`)
       .onNodeClick(node => alert(`Vous avez cliqué sur ${node['id']}`))
       .cooldownTicks(100)
       .d3AlphaDecay(0.02)
