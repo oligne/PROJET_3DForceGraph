@@ -86,11 +86,11 @@
       .nodeAutoColorBy("color")
       .nodeLabel(node => `Fichier: ${node["id"]}`)
       .onNodeClick(node => alert(`Vous avez cliqué sur ${node['id']}`))
-      .cooldownTicks(100)
+      .cooldownTicks(50)
       .d3AlphaDecay(0.02)
       .d3VelocityDecay(0.3)
       .linkWidth(0.3)
-      .linkOpacity(0.2);
+      .linkOpacity(0.8);
 
     // Écouteur pour mettre à jour le graph quand le slider change
     slider.addEventListener('input', updateGraph);
