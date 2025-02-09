@@ -86,9 +86,9 @@
       .nodeAutoColorBy("color")
       .nodeLabel(node => `Fichier: ${node["id"]}`)
       .onNodeClick(node => alert(`Vous avez cliqué sur ${node['id']}`))
-      .cooldownTicks(50)
-      .d3AlphaDecay(0.02)
-      .d3VelocityDecay(0.3)
+      .cooldownTicks(200)
+      .d3AlphaDecay(0.1)
+      .d3VelocityDecay(0.6)
       .linkWidth(0.3)
       .linkOpacity(0.8);
 
