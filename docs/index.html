@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Graphique 3D</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    #3d-graph {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+ <script src="https://unpkg.com/3d-force-graph"></script>
+</head>
+
+<body>
+
+  <div id="3d-graph"></div>
+
+  <script>
+    const elem = document.getElementById('3d-graph');
+
+    // Ici, on charge le fichier JSON local ou depuis une URL
+    const graph = ForceGraph3D()(elem)
+      .jsonUrl('datasets/data.json')  // Remplace par le chemin correct vers ton fichier JSON
+      .nodeAutoColorBy('type')  // Adapte la clé selon ta structure JSON, ici 'type'
+      .nodeLabel(node => `${node.Nom_du_fichier}: ${node.Extension}`)  // Change le label selon tes données
+      .onNodeClick(node => alert(`Vous avez cliqué sur ${node.Nom_du_fichier}`));
+
+    // Ajouter des options pour améliorer les performances si nécessaire
+    graph.cooldownTicks(100)
+      .d3AlphaDecay(0.02)
+      .d3VelocityDecay(0.3)
+      .linkWidth(0.3)
+      .linkOpacity(0.2);
+
+  </script>
+
+</body>
+
+</html>
