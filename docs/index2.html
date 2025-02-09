@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Graphique 3D Fixe</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+
+    #3d-graph {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://unpkg.com/3d-force-graph"></script>
+</head>
+
+<body>
+
+  <div id="3d-graph"></div>
+
+  <script>
+    const elem = document.getElementById('data.json');
+
+    
+    // Ici, on charge le fichier JSON local ou depuis une URL
+    const graph = ForceGraph3D()(elem)
+      .jsonUrl('data.json')  // Remplace par le chemin correct vers ton fichier JSON
+      .nodeAutoColorBy('type')  // Adapte la clé selon ta structure JSON, ici 'type'
+      .nodeLabel(node => `${node["Nom du fichier"]}: ${node.Extension}`)  // Change le label selon tes données
+      .onNodeClick(node => alert(`Vous avez cliqué sur ${node["Nom du fichier"]}`));
+
+    // Applique une force pour garder l'arborescence fixe (représente des liens ou un graphe statique)
+    graph.d3Force('charge').strength(0)  // Éviter la répulsion entre les nœuds
+      .d3Force('link').strength(0.5)  // Ajuste la force des liens si nécessaire
+      .d3Force('collide').strength(0.2)  // Collisions modérées pour l'agencement
+
+    // Ajuste la mise en forme pour optimiser les performances
+    graph.cooldownTicks(100)
+      .d3AlphaDecay(0.02)
+      .d3VelocityDecay(0.3)
+      .linkWidth(0.3)
+      .linkOpacity(0.2);
+
+  </script>
+
+</body>
+
+</html>

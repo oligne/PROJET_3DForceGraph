@@ -1,55 +1,55 @@
-<!DOCTYPE html>
-<html lang="fr">
-
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Graphique 3D Fixe</title>
-  <style>
-    body, html {
-      margin: 0;
-      padding: 0;
-      height: 100%;
-    }
+    <style> body { margin: 0; } </style>
+  
+    <script src="//unpkg.com/3d-force-graph"></script>
+    <!--<script src="../../dist/3d-force-graph.js"></script>-->
+  </head>
+  
+  <body>
+    <div id="3d-graph"></div>
+  
+    <script>
 
-    #3d-graph {
-      width: 100%;
-      height: 100%;
-    }
-  </style>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-  <script src="https://unpkg.com/3d-force-graph"></script>
-</head>
+        
+fetch('datasets/data.json')
+  .then(response => response.json())
+  .then(fullGraph => {
+    const percentageToKeep = 0.1;  // Change ici pour ajuster le pourcentage (0.5 = 50%)
 
-<body>
+    // Sélection aléatoire d'un sous-ensemble de nœuds
+    const shuffledNodes = fullGraph.nodes.sort(() => 0.5 - Math.random());  
+    const numNodesToKeep = Math.floor(shuffledNodes.length * percentageToKeep);
+    const selectedNodes = shuffledNodes.slice(0, numNodesToKeep);
 
-  <div id="3d-graph"></div>
+    // Créer un Set des ID des nœuds sélectionnés pour un accès rapide
+    const selectedNodeIds = new Set(selectedNodes.map(node => node.id));
 
-  <script>
-    const elem = document.getElementById('data.json');
+    // Filtrer les liens pour ne garder que ceux entre les nœuds sélectionnés
+    const selectedLinks = fullGraph.links.filter(link => 
+      selectedNodeIds.has(link.source) && selectedNodeIds.has(link.target)
+    );
 
-    
-    // Ici, on charge le fichier JSON local ou depuis une URL
-    const graph = ForceGraph3D()(elem)
-      .jsonUrl('datasets/data.json')  // Remplace par le chemin correct vers ton fichier JSON
-      .nodeAutoColorBy('type')  // Adapte la clé selon ta structure JSON, ici 'type'
-      .nodeLabel(node => `${node["Nom du fichier"]}: ${node.Extension}`)  // Change le label selon tes données
-      .onNodeClick(node => alert(`Vous avez cliqué sur ${node["Nom du fichier"]}`));
+    // Initialiser le graph avec ces données filtrées
+    const graph = ForceGraph3D()(document.getElementById('3d-graph'))
+      .graphData({ nodes: selectedNodes, links: selectedLinks })
+      .nodeAutoColorBy('type')
+      .nodeLabel(node => `${node['Nom du fichier']}: ${node.Extension}`)
+      .onNodeClick(node => alert(`Vous avez cliqué sur ${node['Nom du fichier']}`));
 
-    // Applique une force pour garder l'arborescence fixe (représente des liens ou un graphe statique)
-    graph.d3Force('charge').strength(0)  // Éviter la répulsion entre les nœuds
-      .d3Force('link').strength(0.5)  // Ajuste la force des liens si nécessaire
-      .d3Force('collide').strength(0.2)  // Collisions modérées pour l'agencement
-
-    // Ajuste la mise en forme pour optimiser les performances
+    // Ajouter des optimisations de performance
     graph.cooldownTicks(100)
       .d3AlphaDecay(0.02)
       .d3VelocityDecay(0.3)
       .linkWidth(0.3)
       .linkOpacity(0.2);
+  })
+  .catch(error => console.error('Erreur lors du chargement du fichier JSON :', error));
 
-  </script>
 
-</body>
-
-</html>
+      const Graph = new ForceGraph3D(document.getElementById('3d-graph'))
+          .jsonUrl('data.json')
+          .nodeLabel('Nom du fichier')
+          .nodeAutoColorBy('Dossier');
+    </script>
+  </body>
+  
