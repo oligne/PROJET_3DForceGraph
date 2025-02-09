@@ -67,7 +67,6 @@
 
       // Mélange les nœuds et en sélectionne un pourcentage
       const filteredNodes = fullGraph.nodes
-        .sort(() => 0.5 - Math.random()) // Mélange aléatoire
         .slice(0, Math.ceil(fullGraph.nodes.length * sampleSize));
 
       // Conserver uniquement les liens connectés aux nœuds visibles
@@ -83,12 +82,12 @@
 
     // Initialisation du graph
     const graph = ForceGraph3D()(elem)
-      .nodeAutoColorBy('type')
+      .nodeAutoColorBy('Dossier')
       .nodeLabel(node => `Fichier: ${node['Nom du fichier']}`)
-      .onNodeClick(node => alert(`Vous avez cliqué sur ${node['Nom du fichier']}`))
-      .cooldownTicks(100)
+      .onNodeHover(node => `Fichier: ${node['Nom du fichier']}`)
+      .cooldownTicks(50)
       .d3AlphaDecay(0.02)
-      .d3VelocityDecay(0.3)
+      .d3VelocityDecay(0.1)
       .linkWidth(0.3)
       .linkOpacity(0.2);
 
