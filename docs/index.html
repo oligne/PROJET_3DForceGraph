@@ -94,15 +94,15 @@
             ? { x: node.x * distRatio, y: node.y * distRatio, z: node.z * distRatio }
             : { x: 0, y: 0, z: distance }; // special case if node is in (0,0,0)
 
-          Graph.cameraPosition(
+          graph.cameraPosition(
             newPos, // new position
             node, // lookAt ({ x, y, z })
             3000  // ms transition duration
-          );})
+          )})
       .d3AlphaDecay(0.1)
       .d3VelocityDecay(0.6)
       .linkWidth(0.3)
-      .linkOpacity(0.8)
+      .linkOpacity(0.8);
       
         
       
