@@ -35,10 +35,6 @@
       .nodeLabel(node => `${node["Nom du fichier"]}: ${node.Extension}`)  // Change le label selon tes données
       .onNodeClick(node => alert(`Vous avez cliqué sur ${node["Nom du fichier"]}`));
 
-    // Désactivation des interactions de drag, zoom et autres
-    graph.enableNodeDrag(false)
-      .enableMouseInteraction(false);  // Désactive les autres interactions de souris
-
     // Applique une force pour garder l'arborescence fixe (représente des liens ou un graphe statique)
     graph.d3Force('charge').strength(0)  // Éviter la répulsion entre les nœuds
       .d3Force('link').strength(0.5)  // Ajuste la force des liens si nécessaire
