@@ -83,7 +83,7 @@
 
     // Initialisation du graph
     const graph = ForceGraph3D()(elem)
-      .nodeAutoColorBy('Categorie')
+      .nodeColor(["type"])
       .nodeLabel(node => `Fichier: ${node["id"]}`)
       .onNodeClick(node => {
           // Aim at node from outside it
