@@ -62,13 +62,17 @@
     function updateGraph() {
       if (!fullGraph) return;
 
+      const excludedWords = ["fluid", "config", "cache"]; 
+
       const sampleSize = slider.value / 100; // Convertit en fraction (ex: 20% => 0.2)
       percentageDisplay.textContent = `${slider.value}%`;
 
       // Mélange les nœuds et en sélectionne un pourcentage
       const filteredNodes = fullGraph.nodes
         .sort(() => 0.01 - Math.random()) // Mélange aléatoire
-        .slice(0, Math.ceil(fullGraph.nodes.length * sampleSize));
+        .slice(0, Math.ceil(fullGraph.nodes.length * sampleSize))
+        .filter(node => !excludedWords.some(word => node.id.toLowerCase().includes(word))); // Exclut certains mots
+
 
       // Conserver uniquement les liens connectés aux nœuds visibles
       const filteredLinks = fullGraph.links.filter(link =>
