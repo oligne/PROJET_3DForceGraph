@@ -88,7 +88,7 @@
     // Initialisation du graph
     const graph = ForceGraph3D()(elem)
       .backgroundColor('#1c1919')
-      .nodeColor('year')
+      .nodeColor('color')
       .nodeLabel(node => `(${node.year}) ${node["id"]}`)
       .onNodeClick(node => {
           // Aim at node from outside it
