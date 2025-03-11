@@ -51,7 +51,7 @@
     let fullGraph = null;
 
     // Charger les données JSON
-    fetch(`data.json?t=${Date.now()}`)
+    fetch('data.json')
       .then(response => response.json())
       .then(data => {
         fullGraph = data;
@@ -83,8 +83,9 @@
 
     // Initialisation du graph
     const graph = ForceGraph3D()(elem)
-      .nodeColor(["type"])
-      .nodeLabel(node => `Fichier: ${node["id"]}`)
+      .backgroundColor('#1c1919')
+      .nodeColor('type')
+      .nodeLabel(node => `${node["id"]}`)
       .onNodeClick(node => {
           // Aim at node from outside it
           const distance = 40;
@@ -98,6 +99,7 @@
             newPos, // new position
             node, // lookAt ({ x, y, z })
             3000  // ms transition duration
+            
           )})
       .d3AlphaDecay(0.1)
       .d3VelocityDecay(0.6)
