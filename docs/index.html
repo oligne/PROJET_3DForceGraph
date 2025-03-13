@@ -30,7 +30,6 @@
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://unpkg.com/3d-force-graph"></script>
-  <script src="https://d3js.org/d3.v6.min.js"></script>
 </head>
 
 <body>
@@ -56,22 +55,6 @@
       .then(response => response.json())
       .then(data => {
         fullGraph = data;
-
-        // Échelle pour positionner les fichiers selon l'année
-    const years = data.nodes.map(n => n.year).filter(y => y);
-    const xScale = scaleLinear().domain([Math.min(...years), Math.max(...years)]).range([-500, 500]);
-
-    // Fonction pour une dispersion organique en Y et Z
-    const randomOffset = (strength) => (Math.random() - 0.5) * strength;
-
-    // Appliquer les positions initiales
-    data.nodes.forEach(node => {
-      node.x = xScale(node.year);
-      node.y = randomOffset(200); // Dispersion verticale
-      node.z = randomOffset(200); // Dispersion en profondeur
-    });
-
-
         updateGraph();
       })
       .catch(error => console.error('Erreur lors du chargement du fichier JSON :', error));
@@ -104,10 +87,8 @@
 
     // Initialisation du graph
     const graph = ForceGraph3D()(elem)
-      .graphData(data)
       .backgroundColor('#1c1919')
       .nodeColor('Extension')
-      .nodeAutoColorBy('extension') // Couleur par type de fichier
       .nodeLabel(node => `${node["id"]}`)
       .onNodeClick(node => {
           // Aim at node from outside it
@@ -124,17 +105,10 @@
             3000  // ms transition duration
             
           )})
-     
-      
-      
-      
-      .forceEngine('d3')
-      .d3Force('charge').strength(-10) // Éviter superposition
-      .d3Force('center', null) // Désactiver la recentralisation
-      .d3Force('link', null) // Désactiver les liens
-      .d3Force('x', d3.forceX(d => xScale(d.year)).strength(0.1)) // Attirer sur l'axe X
-      .d3Force('y', d3.forceY(0).strength(0.005)) // Légère gravité vers Y=0
-      .d3Force('z', d3.forceZ(0).strength(0.005)); // Gravité sur Z aussi
+      .d3AlphaDecay(0.1)
+      .d3VelocityDecay(0.6)
+      .linkWidth(0.3)
+      .linkOpacity(0.8);
       
         
       
