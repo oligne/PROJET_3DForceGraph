@@ -27,7 +27,7 @@
       padding: 10px;
       border-radius: 5px;
     } */
-     
+
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
   <script src="https://unpkg.com/3d-force-graph"></script>
@@ -48,7 +48,7 @@
   <script>
     const slider = document.getElementById('dataRange');
     const percentageDisplay = document.getElementById('dataPercentage');
-    const elem = document.getElementById('3d-graph');
+    const elem = (document.getElementById('3d-graph'), { controlType: 'fly' }); 
     let fullGraph = null;
 
     // Charger les données JSON
