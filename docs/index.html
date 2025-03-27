@@ -87,7 +87,7 @@
     }
 
     // Initialisation du graph
-    const graph = ForceGraph3D()(elem)
+    const graph = ForceGraph3D(elem, { controlType: 'fly' })
       .backgroundColor('#1c1919')
       .nodeColor('Extension')
       .nodeLabel(node => `${node["id"]}`)
